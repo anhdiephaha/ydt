@@ -1,9 +1,13 @@
 package com.ydt.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -34,9 +38,11 @@ public class User {
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles = new HashSet<>();
-    
-    
+	@JsonIgnore
+//    private Set<Role> roles = new HashSet<>();
+	private List<Role> roles = new ArrayList<>();
+    @Transient
+	private Long roleId;
 
 	public User() {
 		super();
@@ -49,13 +55,18 @@ public class User {
 		this.name = name;
 		this.username = username;
 		this.password = password;
-		this.roles = roles;
 	}
 
-	
+	public Long getRoleId() {
+		return roleId;
+	}
+
+	public void setRoleId(Long roleId) {
+		this.roleId = roleId;
+	}
 
 	public User(@NotBlank @Size(max = 120) String name, @NotBlank @Size(max = 15) String username,
-			@NotBlank @Size(max = 100) String password) {
+				@NotBlank @Size(max = 100) String password) {
 		super();
 		this.name = name;
 		this.username = username;
@@ -94,13 +105,11 @@ public class User {
 		this.password = password;
 	}
 
-	public Set<Role> getRoles() {
+	public List<Role> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(Set<Role> roles) {
+	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
-    
-    
 }

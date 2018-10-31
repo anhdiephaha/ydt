@@ -1,6 +1,8 @@
 package com.ydt.controller;
 
 
+import com.ydt.payload.*;
+import com.ydt.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,10 +22,6 @@ import com.ydt.entity.Role;
 import com.ydt.entity.RoleName;
 import com.ydt.entity.User;
 import com.ydt.exception.AppException;
-import com.ydt.payload.ApiResponse;
-import com.ydt.payload.JwtAuthenticationResponse;
-import com.ydt.payload.LoginRequest;
-import com.ydt.payload.SignUpRequest;
 import com.ydt.repository.RoleRepository;
 import com.ydt.repository.UserRepository;
 import com.ydt.security.JwtTokenProvider;
@@ -54,6 +52,7 @@ public class AuthController {
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+        LoginResponse message = new LoginResponse();
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -63,9 +62,14 @@ public class AuthController {
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
+        UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
         String jwt = tokenProvider.generateToken(authentication);
-        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+
+        message.setAccessToken(jwt);
+        User u = userRepository.getOne(user.getId());
+        u.setRoleId(u.getRoles().get(0).getId());
+        message.setUsername(u);
+        return ResponseEntity.ok(message);
     }
 
     @PostMapping("/signup")
@@ -86,7 +90,7 @@ public class AuthController {
         }catch (Exception e) {
         	new AppException("User Role not set.");
 		}
-        user.setRoles(Collections.singleton(userRole));
+        user.setRoles(Collections.singletonList(userRole));
 
         User result = userRepository.save(user);
 
