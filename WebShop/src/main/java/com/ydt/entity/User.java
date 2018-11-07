@@ -41,6 +41,11 @@ public class User {
 	@JsonIgnore
 //    private Set<Role> roles = new HashSet<>();
 	private List<Role> roles = new ArrayList<>();
+
+	@ManyToOne
+	@JoinColumn(name = "id_profile")
+	private Profile profile;
+
     @Transient
 	private Long roleId;
 
@@ -71,6 +76,14 @@ public class User {
 		this.name = name;
 		this.username = username;
 		this.password = password;
+	}
+
+	public Profile getProfile() {
+		return profile;
+	}
+
+	public void setProfile(Profile profile) {
+		this.profile = profile;
 	}
 
 	public Long getId() {

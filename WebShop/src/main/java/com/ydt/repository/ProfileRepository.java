@@ -1,9 +1,9 @@
 package com.ydt.repository;
 
-import com.ydt.entity.Product;
+import com.ydt.entity.Profile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product,Long> {
+public interface ProfileRepository extends JpaRepository<Profile,Long> {
 }
