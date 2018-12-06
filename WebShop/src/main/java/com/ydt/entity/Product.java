@@ -1,6 +1,8 @@
 package com.ydt.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,60 +13,70 @@ import java.io.Serializable;
 public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String name;
-    private float price;
-    private String description;
-    private String image;
+    @JsonProperty("Menu_ID")
+    @JsonIgnore
+    private Long Menu_ID;
+    @JsonProperty("Menu_name")
+    @JsonIgnore
+    private String Menu_name;
+    @JsonProperty("Price")
+    @JsonIgnore
+    private float Price;
+    @JsonProperty("Menu_image")
+    @JsonIgnore
+    private String Menu_image;
+    @ManyToOne
+    @JoinColumn(name = "Category_ID")
+    @JsonIgnore
+    private Category id_cate;
 
     public Product() {
     }
 
-    public Product(String name, float price, String description, String image) {
-        this.name = name;
-        this.price = price;
-        this.description = description;
-        this.image = image;
+    public Product(String menu_name, float price, String menu_image, Category id_cate) {
+        Menu_name = menu_name;
+        Price = price;
+        Menu_image = menu_image;
+        this.id_cate = id_cate;
     }
 
-
-    public Long getId() {
-        return id;
+    public Long getMenu_ID() {
+        return Menu_ID;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setMenu_ID(Long menu_ID) {
+        Menu_ID = menu_ID;
     }
 
-    public String getName() {
-        return name;
+    public String getMenu_name() {
+        return Menu_name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setMenu_name(String menu_name) {
+        Menu_name = menu_name;
     }
 
     public float getPrice() {
-        return price;
+        return Price;
     }
 
     public void setPrice(float price) {
-        this.price = price;
+        Price = price;
     }
 
-    public String getDescription() {
-        return description;
+    public String getMenu_image() {
+        return Menu_image;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setMenu_image(String menu_image) {
+        Menu_image = menu_image;
     }
 
-    public String getImage() {
-        return image;
+    public Category getId_cate() {
+        return id_cate;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setId_cate(Category id_cate) {
+        this.id_cate = id_cate;
     }
 }

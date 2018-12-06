@@ -5,15 +5,16 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import com.ydt.entity.Users;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ydt.entity.User;
 
 public class UserPrincipal implements UserDetails{
-	private Long id;
+
+	private int id;
 
     private String name;
 
@@ -26,7 +27,7 @@ public class UserPrincipal implements UserDetails{
     
     
 
-	public UserPrincipal(Long id, String name, String username, String password,
+	public UserPrincipal(int id, String name, String username, String password,
 			Collection<? extends GrantedAuthority> authorities) {
 		super();
 		this.id = id;
@@ -36,27 +37,26 @@ public class UserPrincipal implements UserDetails{
 		this.authorities = authorities;
 	}
 	
-	public static UserPrincipal create(User user) {
-        List<GrantedAuthority> authorities = user.getRoles().stream().map(role ->
-                new SimpleGrantedAuthority(role.getName().name())
+	public static UserPrincipal create(Users user) {
+        List<GrantedAuthority> authorities = user.getRoleUsers().stream().map(role ->
+                new SimpleGrantedAuthority(role.getRoles().getRoleName())
         ).collect(Collectors.toList());
 
         return new UserPrincipal(
-                user.getId(),
-                user.getName(),
-                user.getUsername(),
+                user.getUserId(),
+                user.getFullName(),
+                user.getUserName(),
                 user.getPassword(),
                 authorities
         );
     }
-	
-	
 
-	public Long getId() {
+
+	public int getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -130,10 +130,6 @@ public class UserPrincipal implements UserDetails{
         return Objects.equals(id, that.id);
     }
 
-    @Override
-    public int hashCode() {
 
-        return Objects.hash(id);
-    }
 
 }

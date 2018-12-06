@@ -1,8 +1,11 @@
 package com.ydt.controller;
 
+import com.ydt.entity.Category;
 import com.ydt.entity.Product;
 import com.ydt.payload.LoginRequest;
 import com.ydt.payload.Payload;
+import com.ydt.payload.PayloadProduct;
+import com.ydt.repository.CategoryRepository;
 import com.ydt.repository.ProductRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,13 +15,15 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/product")
 public class ProductController {
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 
@@ -87,6 +92,28 @@ public class ProductController {
         msg.setStatus("true");
         msg.setMesssage("Lấy sản phẩm thành công !");
         msg.setData(p);
+        return ResponseEntity.ok(msg);
+    }
+
+    @PostMapping("/getProductByCate")
+    public ResponseEntity<?> getProductByCate(@RequestParam("idCate") Long idCate) {
+        PayloadProduct msg = new PayloadProduct();
+        Map<String,Object> mapRes = null;
+        List<Product> p = null;
+        try {
+            p = productRepository.getProductByCate(idCate);
+            List<Object> cateJson =  new ArrayList<>();;
+            for(Product c: p) {
+                mapRes = new HashMap<>();
+                mapRes.put("Menu", c);
+                cateJson.add(mapRes);
+            }
+            msg.setData(cateJson);
+        }catch (Exception e){
+            logger.error("Lấy sản phẩm thất bại !");
+            e.printStackTrace();
+            msg = new PayloadProduct(null);
+        }
         return ResponseEntity.ok(msg);
     }
     @GetMapping("/")

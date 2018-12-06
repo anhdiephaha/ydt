@@ -1,17 +1,20 @@
 package com.ydt.payload;
 
 
-import com.ydt.entity.User;
+import com.ydt.entity.Roles;
+import com.ydt.entity.Users;
+
+import java.util.List;
 
 public class LoginResponse {
 	private String accessToken;
-	private User username;
+	private Users username;
 
 	public LoginResponse() {
 
 	}
 
-	public LoginResponse(String accessToken, User username) {
+	public LoginResponse(String accessToken, Users username) {
 		this.accessToken = accessToken;
 		this.username = username;
 	}
@@ -24,11 +27,12 @@ public class LoginResponse {
 		this.accessToken = accessToken;
 	}
 
-	public User getUsername() {
+	public Users getUsername() {
 		return username;
 	}
 
-	public void setUsername(User username) {
+	public void setUsername(Users username) {
 		this.username = username;
 	}
+
 }

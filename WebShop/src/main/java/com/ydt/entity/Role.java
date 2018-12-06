@@ -1,51 +1,39 @@
 package com.ydt.entity;
 
-import org.hibernate.annotations.NaturalId;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "roles")
-public class Role {
+@Table(name = "roles", catalog = "webshop1")
+public class role implements java.io.Serializable{
+    private int roleId;
+    private String roleName;
+    public role() {
+    }
+    public role(int roleId) {
+        this.roleId = roleId;
+    }
+    public role(int roleId, String roleName){
+        this.roleId = roleId;
+        this.roleName = roleName;
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "role_id", unique = true, nullable = false)
+    public int getRoleId() {
+        return this.roleId;
+    }
 
-    @Enumerated(EnumType.STRING)
-    @NaturalId
-    @Column(length = 60)
-    private RoleName name;
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
+    }
 
-    
-	public Role() {
-		super();
-	}
+    @Column(name = "role_name", length = 200)
+    public String getRoleName() {
+        return this.roleName;
+    }
 
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
 
-	public Role(Long id, RoleName name) {
-		super();
-		this.id = id;
-		this.name = name;
-	}
-
-
-	public Long getId() {
-		return id;
-	}
-
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-
-	public RoleName getName() {
-		return name;
-	}
-
-
-	public void setName(RoleName name) {
-		this.name = name;
-	}
-    
-    
 }
