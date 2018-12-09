@@ -2,22 +2,31 @@ package com.ydt.dao.impl;
 
 import com.ydt.dao.RoleObjectControleDAO;
 import com.ydt.entity.ObjectControl;
+import com.ydt.entity.RoleUser;
+import com.ydt.entity.RoleUserId;
 import com.ydt.entity.Roles;
+import com.ydt.payload.Payload;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManagerFactory;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 @Repository
 @Transactional
 public class RoleObjectControleDAOImpl implements RoleObjectControleDAO {
+    private static final Logger logger = LoggerFactory.getLogger(RoleObjectControleDAOImpl.class);
+
     @Autowired
     private EntityManagerFactory entityManagerFactory;
 
@@ -68,5 +77,21 @@ public class RoleObjectControleDAOImpl implements RoleObjectControleDAO {
         List<Roles> roles = query.list();
         session.close();
         return roles;
+    }
+
+    @Override
+    public boolean saveRoleUser(RoleUserId roleUser) {
+        Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
+        boolean rs = false;
+        try {
+            session.saveOrUpdate(roleUser);
+            rs = true;
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            rs = false;
+        }finally {
+            session.close();
+        }
+        return rs;
     }
 }

@@ -1,6 +1,12 @@
 package com.ydt.payload;
 
+import com.ydt.entity.Roles;
+
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class SignUpRequest {
 	@NotBlank
@@ -11,6 +17,8 @@ public class SignUpRequest {
 
     @NotBlank
     private String password;
+
+    List<Integer> roles = new ArrayList<>();
 
 	public String getName() {
 		return name;
@@ -35,6 +43,12 @@ public class SignUpRequest {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-    
-    
+
+	public List<Integer> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Integer> roles) {
+		this.roles = roles;
+	}
 }

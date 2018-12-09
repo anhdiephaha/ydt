@@ -1,7 +1,7 @@
 package com.ydt.repository;
 
-import com.ydt.entity.role;
+import com.ydt.entity.Roles;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface RolesRepository extends JpaRepository<role, Integer> {
+public interface RolesRepository extends JpaRepository<Roles, Integer> {
 }

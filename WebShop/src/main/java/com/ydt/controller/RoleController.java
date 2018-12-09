@@ -3,7 +3,6 @@ package com.ydt.controller;
 import com.ydt.dao.RoleObjectControleDAO;
 import com.ydt.entity.ObjectControl;
 import com.ydt.entity.Roles;
-import com.ydt.entity.role;
 import com.ydt.payload.Payload;
 import com.ydt.repository.RolesRepository;
 import org.slf4j.Logger;
@@ -33,7 +32,7 @@ public class RoleController {
     private static final Logger getLogger = LoggerFactory.getLogger(RoleController.class);
 
     @GetMapping("/getAllObjectControlOfRole")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> getProductByCate(@RequestParam("idUser") Integer idUser) {
         Payload msg = new Payload();
         List<ObjectControl> p = null;
@@ -49,7 +48,7 @@ public class RoleController {
     }
     
     @PostMapping("/addRole")
-    public ResponseEntity<?> addRole(@Valid @RequestBody role roles) {
+    public ResponseEntity<?> addRole(@Valid @RequestBody Roles roles) {
         Payload msg = new Payload();
         try {
             rolesRepository.save(roles);
@@ -64,7 +63,7 @@ public class RoleController {
     }
     
     @PutMapping("/updateRole")
-    public ResponseEntity<?> updateRole(@Valid @RequestBody role roles) {
+    public ResponseEntity<?> updateRole(@Valid @RequestBody Roles roles) {
         Payload msg = new Payload();
         try {
             rolesRepository.save(roles);
@@ -81,7 +80,7 @@ public class RoleController {
     @DeleteMapping("/deleteRole/{roleId}")
     public ResponseEntity<?> deleteRole(@PathVariable int roleId){
         Payload msg = new Payload();
-        role roles = rolesRepository.getOne(roleId);
+        Roles roles = rolesRepository.getOne(roleId);
         try {
             rolesRepository.delete(roles);
         }catch (Exception e) {
@@ -97,7 +96,7 @@ public class RoleController {
     @GetMapping("/{roleId}")
     public ResponseEntity<?> getOneRole(@PathVariable int roleId) {
         Payload msg = new Payload();
-        role roles =null;
+        Roles roles =null;
         try {
             roles = rolesRepository.getOne(roleId);
         } catch (Exception e){
@@ -113,7 +112,7 @@ public class RoleController {
     @GetMapping("/getAllRole")
     public ResponseEntity<?> getAllRole() {
         Payload msg = new Payload();
-        List<role> roles = null;
+        List<Roles> roles = null;
         try {
             roles = rolesRepository.findAll();
         } catch (Exception e) {

@@ -29,6 +29,7 @@ public class Users implements java.io.Serializable {
 	private Set<ObjectControlUser> objectControlUsers = new HashSet<ObjectControlUser>(0);
 	@JsonIgnore
 	private Set<RoleUser> roleUsers = new HashSet<RoleUser>(0);
+
 	private List<Roles> roles = new ArrayList<>();
 
 	public Users() {

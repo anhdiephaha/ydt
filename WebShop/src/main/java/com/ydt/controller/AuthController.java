@@ -3,10 +3,15 @@ package com.ydt.controller;
 
 import com.ydt.dao.RoleObjectControleDAO;
 import com.ydt.dao.UserDAO;
+import com.ydt.entity.RoleUser;
+import com.ydt.entity.RoleUserId;
 import com.ydt.entity.Roles;
 import com.ydt.entity.Users;
 import com.ydt.payload.*;
+import com.ydt.repository.RoleUserRepository;
 import com.ydt.security.UserPrincipal;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,12 +35,15 @@ import com.ydt.security.JwtTokenProvider;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin("*")
 public class AuthController {
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @Autowired
     AuthenticationManager authenticationManager;
@@ -57,6 +65,9 @@ public class AuthController {
 
     @Autowired
     RoleObjectControleDAO controleDAO;
+
+    @Autowired
+    RoleUserRepository roleUserRepository;
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -97,16 +108,23 @@ public class AuthController {
                  signUpRequest.getPassword());
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Roles userRole = null;
-        try {
-        	userRole = roleRepository.findByRoleName("ROLE_USER");
-        }catch (Exception e) {
-        	new AppException("User Role not set.");
-		}
-//        user.setRoles(Collections.singletonList(userRole));
 
         Users result = userRepository.save(user);
 
+        RoleUser roleUser = new RoleUser();
+        RoleUserId roleUserId = new RoleUserId();
+        Set<RoleUser> roleUsers = new HashSet<>();
+        RoleUser rs = null;
+        for(int i=0;i<signUpRequest.getRoles().size();i++){
+            roleUserId.setRoleId(signUpRequest.getRoles().get(i));
+            roleUserId.setUserId(result.getUserId());
+            roleUser.setId(roleUserId);
+//            roleUsers.add(roleUser);
+            rs = roleUserRepository.save(roleUser);
+        }
+        if(rs != null){
+            logger.info("Insert to user_role successfully");
+        }
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/api/users/{username}")
                 .buildAndExpand(result.getFullName()).toUri();
