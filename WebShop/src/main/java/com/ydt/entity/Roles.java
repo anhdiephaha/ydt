@@ -64,7 +64,7 @@ public class Roles implements java.io.Serializable {
         this.roleName = roleName;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "roles")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "roles",cascade= {CascadeType.PERSIST, CascadeType.REMOVE})
     public Set<RoleObjectControl> getRoleObjectControls() {
         return this.roleObjectControls;
     }
@@ -73,7 +73,7 @@ public class Roles implements java.io.Serializable {
         this.roleObjectControls = roleObjectControls;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "roles")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "roles",cascade= {CascadeType.PERSIST, CascadeType.REMOVE})
     public Set<RoleObject> getRoleObjects() {
         return this.roleObjects;
     }
@@ -82,7 +82,7 @@ public class Roles implements java.io.Serializable {
         this.roleObjects = roleObjects;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "roles")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "roles",cascade= {CascadeType.PERSIST, CascadeType.REMOVE})
     public Set<RoleUser> getRoleUsers() {
         return this.roleUsers;
     }

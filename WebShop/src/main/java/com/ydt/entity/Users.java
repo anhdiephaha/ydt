@@ -1,16 +1,10 @@
 package com.ydt.entity;
 // Generated Dec 5, 2018 2:49:26 PM by Hibernate Tools 5.0.6.Final
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import org.hibernate.annotations.Proxy;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import javax.persistence.*;
 
 /**
@@ -25,6 +19,14 @@ public class Users implements java.io.Serializable {
 	private String fullName;
 	private String password;
 	private String userName;
+	private int gioiTinh;
+	private Date ngayBatDau;
+	private Date ngaySinh;
+	private String sdt;
+	private String diaChi;
+	private Department departments;
+	private PositionUser positionUsers;
+	private String email;
 	@JsonIgnore
 	private Set<ObjectControlUser> objectControlUsers = new HashSet<ObjectControlUser>(0);
 	@JsonIgnore
@@ -35,10 +37,106 @@ public class Users implements java.io.Serializable {
 	public Users() {
 	}
 
-	public Users(String fullName, String userName, String password) {
+	public Users(int userId, String fullName, String password, String userName) {
+		this.userId = userId;
 		this.fullName = fullName;
-		this.userName = userName;
 		this.password = password;
+		this.userName = userName;
+	}
+
+	public Users(String fullName, String password, String userName) {
+		this.fullName = fullName;
+		this.password = password;
+		this.userName = userName;
+	}
+
+	public Users(String fullName, String password, String userName, int gioiTinh, Date ngayBatDau, Date ngaySinh, String sdt, String diaChi, Department departments, PositionUser positionUsers,String email) {
+		this.fullName = fullName;
+		this.password = password;
+		this.userName = userName;
+		this.gioiTinh = gioiTinh;
+		this.ngayBatDau = ngayBatDau;
+		this.ngaySinh = ngaySinh;
+		this.sdt = sdt;
+		this.diaChi = diaChi;
+		this.departments = departments;
+		this.positionUsers = positionUsers;
+		this.email = email;
+	}
+
+	public Users(int userId, String fullName, String password, String userName, int gioiTinh, Date ngayBatDau, Date ngaySinh, String sdt, String diaChi, Department departments, PositionUser positionUsers,String email) {
+		this.userId = userId;
+		this.fullName = fullName;
+		this.password = password;
+		this.userName = userName;
+		this.gioiTinh = gioiTinh;
+		this.ngayBatDau = ngayBatDau;
+		this.ngaySinh = ngaySinh;
+		this.sdt = sdt;
+		this.diaChi = diaChi;
+		this.departments = departments;
+		this.positionUsers = positionUsers;
+		this.email = email;
+	}
+
+	public int getGioiTinh() {
+		return gioiTinh;
+	}
+
+	public void setGioiTinh(int gioiTinh) {
+		this.gioiTinh = gioiTinh;
+	}
+
+	@Temporal(TemporalType.DATE)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	public Date getNgayBatDau() {
+		return ngayBatDau;
+	}
+
+	public void setNgayBatDau(Date ngayBatDau) {
+		this.ngayBatDau = ngayBatDau;
+	}
+
+	@Temporal(TemporalType.DATE)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	public Date getNgaySinh() {
+		return ngaySinh;
+	}
+
+	public void setNgaySinh(Date ngaySinh) {
+		this.ngaySinh = ngaySinh;
+	}
+
+	public String getSdt() {
+		return sdt;
+	}
+
+	public void setSdt(String sdt) {
+		this.sdt = sdt;
+	}
+
+	public String getDiaChi() {
+		return diaChi;
+	}
+
+	public void setDiaChi(String diaChi) {
+		this.diaChi = diaChi;
+	}
+	@ManyToOne(fetch = FetchType.LAZY)
+	public Department getDepartments() {
+		return departments;
+	}
+
+	public void setDepartments(Department departments) {
+		this.departments = departments;
+	}
+	@ManyToOne(fetch = FetchType.LAZY)
+	public PositionUser getPositionUsers() {
+		return positionUsers;
+	}
+
+	public void setPositionUsers(PositionUser positionUsers) {
+		this.positionUsers = positionUsers;
 	}
 
 	public Users(int userId) {
@@ -87,6 +185,15 @@ public class Users implements java.io.Serializable {
 	@Column(name = "user_name", length = 100)
 	public String getUserName() {
 		return this.userName;
+	}
+
+	@Column(name = "email")
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public void setUserName(String userName) {

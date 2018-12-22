@@ -1,6 +1,8 @@
 package com.ydt.entity;
 // Generated Dec 5, 2018 2:49:26 PM by Hibernate Tools 5.0.6.Final
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -19,7 +21,9 @@ import javax.persistence.Table;
 public class RoleObjectControl implements java.io.Serializable {
 
 	private RoleObjectControlId id;
+	@JsonIgnore
 	private ObjectControl objectControl;
+	@JsonIgnore
 	private Roles roles;
 
 	public RoleObjectControl() {

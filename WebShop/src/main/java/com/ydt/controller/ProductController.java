@@ -116,6 +116,23 @@ public class ProductController {
         }
         return ResponseEntity.ok(msg);
     }
+    @PostMapping("/detail")
+    public ResponseEntity<?> detail(@RequestParam("Menu_ID") Long menu_id) {
+        Payload msg = new Payload();
+        Product p = null;
+        try {
+            p = productRepository.getOne(menu_id);
+        }catch (Exception e){
+            logger.error("Lấy sản phẩm thất bại !");
+            e.printStackTrace();
+            msg = new Payload("False","Lấy sản phẩm thất bại",null);
+        }
+
+        msg.setStatus("true");
+        msg.setMesssage("Lấy sản phẩm thành công !");
+        msg.setData(p);
+        return ResponseEntity.ok(msg);
+    }
     @GetMapping("/")
     public ResponseEntity<?> getAllProduct() {
         Payload msg = new Payload();

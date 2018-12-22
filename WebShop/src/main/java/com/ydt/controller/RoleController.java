@@ -1,9 +1,11 @@
 package com.ydt.controller;
 
 import com.ydt.dao.RoleObjectControleDAO;
-import com.ydt.entity.ObjectControl;
-import com.ydt.entity.Roles;
+import com.ydt.entity.*;
 import com.ydt.payload.Payload;
+import com.ydt.payload.RolePayload;
+import com.ydt.repository.RoleObjectControlRepository;
+import com.ydt.repository.RoleScreenRepository;
 import com.ydt.repository.RolesRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +30,11 @@ public class RoleController {
     
     @Autowired
     private RolesRepository rolesRepository;
+
+    @Autowired
+    private RoleScreenRepository roleScreenRepository;
+    @Autowired
+    private RoleObjectControlRepository roleObjectControlRepository;
     
     private static final Logger getLogger = LoggerFactory.getLogger(RoleController.class);
 
@@ -47,35 +54,44 @@ public class RoleController {
         return ResponseEntity.ok(msg);
     }
     
-    @PostMapping("/addRole")
-    public ResponseEntity<?> addRole(@Valid @RequestBody Roles roles) {
+    @PostMapping("/addOrUpdateRole")
+    public ResponseEntity<?> addRole(@Valid @RequestBody RolePayload roles) {
         Payload msg = new Payload();
         try {
-            rolesRepository.save(roles);
+            Roles role = rolesRepository.save(roles.getRoles());
+            if(role != null){
+                RoleObject roleObject = new RoleObject();
+                RoleObjectId roleObjectId = new RoleObjectId();
+                RoleObjectControl roleObjectControl = new RoleObjectControl();
+                RoleObjectControlId roleObjectControlId = new RoleObjectControlId();
+                for(int i=0;i<roles.getArrScreen().size();i++){
+                    if(roleScreenRepository.existsObjectIdAndRoleId(role.getRoleId(),roles.getArrScreen().get(i))==0) {
+                        roleObjectId.setObjectId(roles.getArrScreen().get(i));
+                        roleObjectId.setRoleId(role.getRoleId());
+                        roleObject.setId(roleObjectId);
+                        roleScreenRepository.save(roleObject);
+                    }
+                }
+                for(int i=0;i<roles.getArrControl().size();i++){
+                    if(roleObjectControlRepository.existsObjectControlIdAndRoleId(role.getRoleId(),roles.getArrControl().get(i))==0) {
+                        roleObjectControlId.setObjectControlId(roles.getArrControl().get(i));
+                        roleObjectControlId.setRoleId(role.getRoleId());
+                        roleObjectControl.setId(roleObjectControlId);
+                        roleObjectControlRepository.save(roleObjectControl);
+                    }
+                }
+            }
         } catch (Exception e) {
             logger.error("Tạo Role thất bại");
+            logger.error(e.getMessage());
             msg = new Payload("False","Tạo Role thất bại", null);
         }
         msg.setStatus("true");
         msg.setMesssage("Tạo role thành công");
-        msg.setData(null);
+        msg.setData(true);
         return ResponseEntity.ok(msg);
     }
-    
-    @PutMapping("/updateRole")
-    public ResponseEntity<?> updateRole(@Valid @RequestBody Roles roles) {
-        Payload msg = new Payload();
-        try {
-            rolesRepository.save(roles);
-        } catch (Exception e) {
-            logger.error("Cập nhật role thất bại");
-            msg = new Payload("False","Cập nhật role thất bại", null);
-        }
-        msg.setStatus("true");
-        msg.setMesssage("Sửa role thành công");
-        msg.setData(null);
-        return ResponseEntity.ok(msg);
-    }
+
     
     @DeleteMapping("/deleteRole/{roleId}")
     public ResponseEntity<?> deleteRole(@PathVariable int roleId){
