@@ -200,7 +200,7 @@ public class Users implements java.io.Serializable {
 		this.userName = userName;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "users")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "users",cascade= {CascadeType.PERSIST, CascadeType.REMOVE})
 	public Set<ObjectControlUser> getObjectControlUsers() {
 		return this.objectControlUsers;
 	}
@@ -209,7 +209,7 @@ public class Users implements java.io.Serializable {
 		this.objectControlUsers = objectControlUsers;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "users")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "users",cascade= {CascadeType.PERSIST, CascadeType.REMOVE})
 	public Set<RoleUser> getRoleUsers() {
 		return this.roleUsers;
 	}

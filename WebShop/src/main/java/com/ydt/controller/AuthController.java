@@ -263,4 +263,21 @@ public class AuthController {
     }
 
 
+    @DeleteMapping("/deleteUser/{userId}")
+    public ResponseEntity<?> deleteRole(@PathVariable int userId){
+        Payload msg = new Payload();
+        Users users = userRepository.getOne(userId);
+        try {
+            userRepository.delete(users);
+        }catch (Exception e) {
+            logger.error("Xóa user thất bại");
+            msg = new Payload("False","Xóa user thất bại", null);
+        }
+        msg.setStatus("true");
+        msg.setMesssage("Xóa user thành công");
+        msg.setData(null);
+        return ResponseEntity.ok(msg);
+    }
+
+
 }
